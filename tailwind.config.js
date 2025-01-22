@@ -10,6 +10,36 @@ export default {
         "./resources/**/*.vue",
         "./node_modules/flowbite/**/*.js",
     ],
+    safelist: [
+        ...[
+            "slate",
+            "gray",
+            "zinc",
+            "neutral",
+            "stone",
+            "red",
+            "orange",
+            "amber",
+            "yellow",
+            "lime",
+            "green",
+            "emerald",
+            "teal",
+            "cyan",
+            "sky",
+            "blue",
+            "indigo",
+            "violet",
+            "purple",
+            "fuchsia",
+            "pink",
+            "rose",
+        ].flatMap((color) => [`bg-${color}-500`, `text-${color}-500`]),
+        ...["white", "black"].flatMap((color) => [
+            `bg-${color}`,
+            `text-${color}`,
+        ]),
+    ],
     theme: {
         extend: {
             fontFamily: {

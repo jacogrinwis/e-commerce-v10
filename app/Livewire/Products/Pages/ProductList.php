@@ -180,6 +180,40 @@ class ProductList extends Component
                 ->orderBy('name')
                 ->get(),
 
+            'stock_status' => collect([
+                [
+                    'id' => 1,
+                    'name' => 'Op voorraad',
+                    'products_count' => Product::query()
+                        ->when($this->selectedCategories, fn($q) => $q->whereIn('category_id', $this->selectedCategories))
+                        ->when($this->selectedColors, fn($q) => $q->whereHas('colors', fn($q) => $q->whereIn('colors.id', $this->selectedColors)))
+                        ->when($this->selectedMaterials, fn($q) => $q->whereHas('materials', fn($q) => $q->whereIn('materials.id', $this->selectedMaterials)))
+                        ->where('stock_status', 1)
+                        ->count()
+                ],
+                [
+                    'id' => 2,
+                    'name' => 'Uitverkocht',
+                    'products_count' => Product::query()
+                        ->when($this->selectedCategories, fn($q) => $q->whereIn('category_id', $this->selectedCategories))
+                        ->when($this->selectedColors, fn($q) => $q->whereHas('colors', fn($q) => $q->whereIn('colors.id', $this->selectedColors)))
+                        ->when($this->selectedMaterials, fn($q) => $q->whereHas('materials', fn($q) => $q->whereIn('materials.id', $this->selectedMaterials)))
+                        ->where('stock_status', 2)
+                        ->count()
+                ],
+                [
+                    'id' => 3,
+                    'name' => 'Nabestelling',
+                    'products_count' => Product::query()
+                        ->when($this->selectedCategories, fn($q) => $q->whereIn('category_id', $this->selectedCategories))
+                        ->when($this->selectedColors, fn($q) => $q->whereHas('colors', fn($q) => $q->whereIn('colors.id', $this->selectedColors)))
+                        ->when($this->selectedMaterials, fn($q) => $q->whereHas('materials', fn($q) => $q->whereIn('materials.id', $this->selectedMaterials)))
+                        ->where('stock_status', 3)
+                        ->count()
+                ]
+            ])
+
+
             // 'stock_status' => collect(StockStatus::cases())
             //     ->map(function ($status) use ($productsQuery) {
             //         return [

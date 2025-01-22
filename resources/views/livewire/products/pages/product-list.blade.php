@@ -168,10 +168,7 @@
                 </div>
             </section>
 
-            {{-- <section
-                x-data="{ open: true }"
-                class="rounded-md border border-gray-300 p-4 shadow-sm"
-            >
+            <section x-data="{ open: true }">
                 <div class="mb-2 flex items-center justify-between">
                     <h3
                         class="flex cursor-pointer items-center gap-2 text-lg font-semibold"
@@ -211,32 +208,26 @@
                         </label>
                     @endforeach
                 </div>
-            </section> --}}
-
+            </section>
 
         </aside>
         <main class="col-span-3">
-            <div class="mb-6 grid grid-cols-3 gap-2">
+            <div class="mb-6 grid grid-cols-3 gap-4">
                 @foreach ($products as $product)
                     <section
-                        {{-- class="rounded-md border border-gray-300 p-4 shadow-sm" --}}
-                        class="rounded p-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+                        wire:key="product-{{ $product->id }}"
+                        class="space-y-2 rounded border border-gray-200 p-4 shadow-sm transition-all duration-300 hover:scale-105 hover:shadow-lg"
                     >
                         <img
                             src="{{ asset($product->cover) }}"
                             alt="{{ $product->name }}"
-                            class="mb-2 aspect-square w-full rounded-md object-cover"
+                            class="aspect-square w-full rounded-md object-cover"
                         >
-                        <h2 class="__truncate mb-2 line-clamp-2 text-xl font-semibold">{{ $product->name }}</h2>
-                        {{-- <p>{{ formatPrice($product->price) }}</p>
-                        @if ($product->discount)
-                            <p class="text-red-600">{{ formatPrice($product->discount_price) }}</p>
-                        @endif --}}
-                        <div class="mb-2">
-                            <livewire:products.components.stock-status :status="$product->stock_status" />
+                        <div class="h-14">
+                            <h2 class="__truncate line-clamp-2 text-xl font-semibold">{{ $product->name }}</h2>
                         </div>
-
-                        <div class="mb-2 grid h-14 grid-cols-2 gap-2">
+                        <x-products.stock-status :status="$product->stock_status" />
+                        <div class="grid h-14 grid-cols-2 gap-2">
                             <div class="grid items-end">
                                 @if ($product->discount)
                                     <p class="text-base text-gray-500 line-through">
@@ -248,12 +239,17 @@
                                     <p class="text-xl font-bold">{{ formatPrice($product->price) }}</p>
                                 @endif
                             </div>
+                            @php
+                                $disabled = $product->stock_status == 3;
+                            @endphp
                             <div class="grid items-end justify-end">
-                                <livewire:products.components.add-to-cart-button :product="$product" />
+                                <x-products.add-to-cart-button
+                                    :product="$product"
+                                    :disabled="$product->stock_status === 2"
+                                />
                             </div>
                         </div>
-
-                        <div class="border p-1 text-xs text-gray-300">
+                        {{-- <div class="border p-1 text-xs text-gray-300">
                             <p>{{ $product->product_number }}</p>
                             <p>Category: {{ $product->category->name }}</p>
                             <div>
@@ -262,7 +258,7 @@
                                     <span>{{ $color->name }}</span>
                                 @endforeach
                             </div>
-                        </div>
+                        </div> --}}
                     </section>
                 @endforeach
             </div>

@@ -20,7 +20,7 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         static $number = 1;
-        $name = $this->faker->words(3, true);
+        $name = $this->faker->words(rand(3, 6), true);
 
         return [
             'name' => ucfirst($name),
